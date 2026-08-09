@@ -1,0 +1,649 @@
+/*
+ * tm theme — base styling.
+ * Plain CSS on purpose (no UnoCSS @apply) so it stays easy to edit.
+ * The Thomas More house style: flat color, square corners, geometric
+ * Century Gothic headings over an Arial body, orange-led with a navy
+ * counterweight. Derived from the official PowerPoint template
+ * (TM-PPT-sjabloon_2023-03-10_NL.pptx).
+ *
+ * Slidev's built-in layouts (default, center, two-cols, ...) still apply;
+ * the custom layouts in `layouts/` add the cover, section, toc, quote,
+ * image and end designs on top of these tokens.
+ *
+ * Colorway contract: layout rules below only ever read the role tokens
+ * (--tm-bg, --tm-heading, ...), never raw hex or brand tokens directly.
+ * The .tm-white/.tm-orange/.tm-navy classes remap the role tokens, which
+ * is the entire colorway mechanism.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap");
+
+:root {
+  /* Brand palette (from the PPT theme "TM Colors Final") ----------------- */
+  --tm-orange: #fa6432; /* primary — titles, logo, accents   */
+  --tm-orange-deep: #f04619; /* pattern fill on the orange bg     */
+  --tm-navy: #00283c; /* dark ground, subtitles            */
+  --tm-black: #000000;
+  --tm-white: #ffffff;
+  --tm-grey: #e8ebee; /* pattern fill on the white bg      */
+  --tm-fill: #f2f5f8; /* code panels, table cells          */
+  --tm-amber: #ffc87b; /* chart/accent palette ------------ */
+  --tm-teal: #00627b;
+  --tm-cyan: #63c8c8;
+  --tm-green: #86d278;
+  --tm-lime: #c8e163;
+  --tm-link-blue: #00637c; /* PPT hyperlink color               */
+
+  /* Type ----------------------------------------------------------------- */
+  /* Century Gothic is the brand heading font but ships with MS Office, not
+     the web; Poppins is the closest free geometric (wide, round, single-
+     story a) with true bold + italics. Arial is the brand body font. */
+  --tm-heading-font:
+    "Century Gothic", CenturyGothic, "Poppins", "Segoe UI", sans-serif;
+  --tm-body-font: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --tm-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Role tokens — white-colorway values double as the defaults so Slidev's
+     built-in layouts (center, fact, ...) render as the white colorway. */
+  --tm-bg: var(--tm-white);
+  --tm-heading: var(--tm-orange);
+  --tm-text: var(--tm-black);
+  --tm-subtitle: var(--tm-navy);
+  --tm-eyebrow: var(--tm-navy);
+  --tm-footer: var(--tm-black);
+  --tm-logo: var(--tm-orange);
+  --tm-pattern: var(--tm-grey);
+  --tm-bullet-1: var(--tm-orange);
+  --tm-bullet-2: var(--tm-navy);
+  --tm-link: var(--tm-link-blue);
+  --tm-pill-bg: var(--tm-navy);
+  --tm-pill-text: var(--tm-white);
+  --tm-block-bg: var(--tm-orange);
+  --tm-block-text: var(--tm-white);
+
+  /* Slidev hooks — components that read these pick up the brand orange.   */
+  --slidev-theme-primary: var(--tm-orange);
+}
+
+/* Colorways -----------------------------------------------------------------
+   Each theme layout takes `color: white | orange | navy` frontmatter and puts
+   the matching class on its root. Only role tokens change here; every layout
+   rule below is colorway-agnostic. */
+
+/* .tm-white inherits the :root defaults — declared for greppability. */
+.slidev-layout.tm-white {
+}
+
+.slidev-layout.tm-orange {
+  --tm-bg: var(--tm-orange);
+  --tm-heading: var(--tm-white);
+  --tm-text: var(--tm-white);
+  --tm-subtitle: var(--tm-white);
+  --tm-eyebrow: var(--tm-white);
+  --tm-footer: var(--tm-white);
+  --tm-logo: var(--tm-white);
+  --tm-pattern: var(--tm-orange-deep);
+  --tm-bullet-1: var(--tm-white);
+  --tm-bullet-2: var(--tm-navy);
+  --tm-link: var(--tm-navy);
+  --tm-pill-bg: var(--tm-navy);
+  --tm-block-bg: var(--tm-navy);
+}
+
+.slidev-layout.tm-navy {
+  --tm-bg: var(--tm-navy);
+  --tm-heading: var(--tm-orange);
+  --tm-text: var(--tm-white);
+  --tm-subtitle: var(--tm-white);
+  --tm-eyebrow: var(--tm-white);
+  --tm-footer: var(--tm-white);
+  --tm-logo: var(--tm-white);
+  --tm-pattern: var(--tm-black);
+  --tm-bullet-1: var(--tm-orange);
+  --tm-bullet-2: var(--tm-white);
+  --tm-link: var(--tm-cyan);
+  --tm-pill-bg: var(--tm-orange);
+  --tm-block-bg: var(--tm-orange);
+}
+
+/* Base slide --------------------------------------------------------------- */
+.slidev-layout {
+  font-family: var(--tm-body-font);
+  background-color: var(--tm-bg);
+  color: var(--tm-text);
+  font-size: 1.15rem;
+  /* PPT body line spacing is 90%; that clips on the web — 1.35 keeps the
+     dense TM look while staying readable. Don't "fix" this back. */
+  line-height: 1.35;
+  /* Fill the whole slide so the background and the flex layouts (cover,
+     section, quote, end) cover the full height — not just the content.
+     min-height (not height) lets a slide grow if its content overflows,
+     rather than clipping it. */
+  min-height: 100%;
+  box-sizing: border-box;
+  /* PPT grid: 4.23% side gutters, title band starting 4.4% down. */
+  padding: 1.5rem 4.25%;
+}
+
+/* Headings ----------------------------------------------------------------- */
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout h3,
+.slidev-layout h4 {
+  font-family: var(--tm-heading-font);
+  color: var(--tm-heading);
+  font-weight: 700;
+  /* PPT title spacing is 85%; 0.95 is the web-safe equivalent (0.85 clips
+     descenders). Don't "fix" this back. */
+  line-height: 0.95;
+}
+
+.slidev-layout h1 {
+  font-size: 2.1rem; /* PPT content title: 44pt bold */
+  margin: 0 0 1.6rem;
+}
+.slidev-layout h2 {
+  font-size: 1.5rem;
+  margin: 0 0 0.8rem;
+}
+.slidev-layout h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+/* Body text ---------------------------------------------------------------- */
+.slidev-layout p {
+  margin: 0 0 0.8em;
+}
+.slidev-layout strong,
+.slidev-layout b {
+  font-weight: 700;
+}
+.slidev-layout a {
+  color: var(--tm-link);
+  text-underline-offset: 3px;
+}
+
+/* Lists — the PPT bullet system: first level orange, second navy, deeper a
+   plain dash. In the PPT, top-level paragraphs carry no bullet at all —
+   authors write plain paragraphs for intro text and opt into bullets with
+   Markdown lists. Bullet colors flip with the colorway tokens. ------------ */
+.slidev-layout ul {
+  list-style: none;
+  padding-left: 0;
+}
+.slidev-layout ul > li {
+  position: relative;
+  padding-left: 1.2em;
+  margin: 0 0 0.5em;
+}
+.slidev-layout ul > li::before {
+  content: "\2022";
+  position: absolute;
+  left: 0;
+  color: var(--tm-bullet-1);
+  font-weight: 700;
+}
+.slidev-layout ul ul {
+  margin-top: 0.5em;
+  font-size: 0.95rem;
+}
+.slidev-layout ul ul > li::before {
+  color: var(--tm-bullet-2);
+}
+.slidev-layout ul ul ul {
+  font-size: 0.9em;
+}
+.slidev-layout ul ul ul > li::before {
+  content: "-";
+  color: var(--tm-text);
+  font-weight: 400;
+}
+.slidev-layout ol {
+  padding-left: 1.3em;
+}
+.slidev-layout ol > li {
+  margin: 0 0 0.5em;
+}
+.slidev-layout ol > li::marker {
+  color: var(--tm-bullet-1);
+  font-weight: 700;
+}
+
+/* Images ------------------------------------------------------------------- */
+/* A standalone Markdown image is its own paragraph. Centre it, keep it inside
+   the slide, and set it on the same light panel ground the code blocks use,
+   with a square-cornered hairline (TM: no rounded corners anywhere).
+   `:only-child` deliberately skips inline runs of images (licence badges,
+   icons in a sentence …), which should stay in the text flow.
+
+   Sizing is in rem, never vh: the slide is a fixed canvas that gets
+   transform-scaled, so vh would measure the browser window instead. 15rem
+   leaves room for a heading, a few lines, and the footer. */
+.slidev-layout p > img:only-child {
+  display: block;
+  max-width: 100%;
+  max-height: 15rem;
+  margin: 0.8em auto 0;
+  background: var(--tm-fill);
+  border: 1px solid var(--tm-grey);
+}
+
+/* Shared eyebrow — the TM chapter kicker: bold italic in the heading face,
+   sitting above a title. Same prop/class name as the ldr theme so decks
+   author identically across both. ----------------------------------------- */
+.eyebrow {
+  font-family: var(--tm-heading-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--tm-eyebrow);
+  margin: 0;
+}
+
+/* Palette text-colour utilities. Apply in Markdown (MDC) on the same line as
+   the text, e.g. `Voordelen {.eyebrow.teal}` or `Let op {.navy}`. Marked
+   !important so they win over the scoped eyebrow and heading colours above.
+   Orange on white fails small-text contrast — keep .orange for headings. */
+.orange {
+  color: var(--tm-orange) !important;
+}
+.navy {
+  color: var(--tm-navy) !important;
+}
+.teal {
+  color: var(--tm-teal) !important;
+}
+.cyan {
+  color: var(--tm-cyan) !important;
+}
+.amber {
+  color: var(--tm-amber) !important;
+}
+.green {
+  color: var(--tm-green) !important;
+}
+.lime {
+  color: var(--tm-lime) !important;
+}
+.black {
+  color: var(--tm-black) !important;
+}
+.white {
+  color: var(--tm-white) !important;
+}
+.grey {
+  color: var(--tm-grey) !important;
+}
+
+/* Theme chrome: logo, pattern band, footer. -------------------------------- */
+
+/* Wordmark box per the PPT masters: top-left at 4.25%/7%, 10.45% wide. */
+.tm-logo {
+  position: absolute;
+  left: 4.25%;
+  top: 7%;
+  width: 10.45%;
+  color: var(--tm-logo);
+  z-index: 2;
+}
+.tm-logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Decorative pattern band: full width, ~37% of the slide height (the PPT's
+   own proportion), hugging the top or bottom edge. Sits under the content
+   (layout content is z-index 1). */
+.tm-pattern {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 37%;
+  color: var(--tm-pattern);
+  pointer-events: none;
+  z-index: 0;
+}
+.tm-pattern--top {
+  top: 0;
+}
+.tm-pattern--bottom {
+  bottom: 0;
+}
+.tm-pattern svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Footer band per the PPT masters: deck title left, page number right. */
+.tm-footer {
+  position: absolute;
+  left: 4.25%;
+  right: 4.25%;
+  bottom: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--tm-body-font);
+  font-size: 0.7rem;
+  color: var(--tm-footer);
+}
+
+/* ===========================================================================
+ * Custom layout looks
+ * ======================================================================== */
+
+/* Cover -------------------------------------------------------------------- */
+.slidev-layout.tm-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 2.4rem;
+}
+.tm-cover__main {
+  position: relative;
+  z-index: 1;
+}
+.tm-cover__main h1 {
+  /* PPT title slides: 54pt, regular weight (unlike content titles). */
+  font-size: 2.6rem;
+  font-weight: 400;
+  margin: 0 0 0.4em;
+}
+.tm-cover__main p {
+  /* PPT cover subtitle: 28pt bold Century Gothic in navy. */
+  font-family: var(--tm-heading-font);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--tm-subtitle);
+  max-width: 85%;
+  margin: 0;
+}
+.tm-cover__main .eyebrow {
+  margin: 0 0 1em;
+}
+.tm-cover__by {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 0.86rem;
+  margin-top: 2.2rem;
+}
+.tm-cover__by .name {
+  font-weight: 700;
+}
+.tm-cover__by .sep {
+  opacity: 0.5;
+}
+
+/* Section divider (PPT "Hoofdstukslide") ----------------------------------- */
+.slidev-layout.tm-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tm-section__main {
+  position: relative;
+  z-index: 1;
+  /* Keep the block clear of the bottom pattern band. */
+  margin-bottom: 12%;
+}
+.tm-section__num {
+  font-family: var(--tm-heading-font);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--tm-heading);
+  margin: 0 0 0.2em;
+}
+.tm-section__main .eyebrow {
+  margin: 0 0 0.5em;
+}
+.tm-section__main h1 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+.tm-section__main p {
+  font-size: 1.15rem;
+  max-width: 70%;
+  margin: 0.8em 0 0;
+}
+
+/* Table of contents (PPT "Inhoudstafel") ----------------------------------- */
+.slidev-layout.tm-toc {
+  padding: 0;
+}
+/* The corner block: a flat color panel top-left with the heading sitting on
+   its baseline — the PPT's most recognizable content arrangement. */
+.tm-toc__block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38.5%;
+  height: 46%;
+  background: var(--tm-block-bg);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.tm-toc__block :is(h1, h2, h3) {
+  color: var(--tm-block-text);
+  font-size: 1.9rem;
+  margin: 0;
+}
+.tm-toc__list {
+  position: absolute;
+  left: 46%;
+  top: 13%;
+  width: 49.5%;
+  z-index: 1;
+  font-size: 1.05rem;
+}
+.tm-toc__list ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tm-toc__list li {
+  margin: 0 0 0.55em;
+}
+/* Nested levels indent and shrink. */
+.tm-toc__list ol ol {
+  margin: 0.55em 0 0;
+  padding-left: 1.2em;
+  font-size: 0.9em;
+}
+.tm-toc__list a {
+  color: var(--tm-text);
+  text-decoration: none;
+  border: none !important;
+}
+.tm-toc__list a:hover,
+.tm-toc__list .slidev-toc-item-active > a {
+  color: var(--tm-heading);
+}
+
+/* Two columns -------------------------------------------------------------- */
+.slidev-layout.tm-two-cols {
+  display: flex;
+  flex-direction: column;
+}
+.tm-two-cols__cols {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 30px;
+  flex: 1;
+  align-items: start;
+}
+.tm-two-cols__divider {
+  background: var(--tm-grey);
+  align-self: stretch;
+}
+.tm-two-cols__cols .eyebrow {
+  font-size: 0.8rem;
+  margin: 0 0 0.6em;
+}
+
+/* Quote -------------------------------------------------------------------- */
+.slidev-layout.tm-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.slidev-layout.tm-quote blockquote {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  font-family: var(--tm-heading-font);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--tm-heading);
+  max-width: 85%;
+}
+/* The attribution pill — deliberately the only rounded element in the whole
+   theme, straight from the PPT quote layouts. */
+.tm-quote__by {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  background: var(--tm-pill-bg);
+  color: var(--tm-pill-text);
+  border-radius: 999px;
+  padding: 0.35em 1.3em;
+  font-size: 0.77rem;
+  margin-top: 1.8em;
+}
+
+/* Full-bleed image with overlaid caption ----------------------------------- */
+.slidev-layout.tm-image-full {
+  padding: 0;
+  background-size: cover;
+  background-position: center;
+}
+.tm-image-full__caption {
+  position: absolute;
+  left: 4.25%;
+  bottom: 9%;
+  max-width: 55%;
+  background: var(--tm-bg);
+  border-left: 3px solid var(--tm-orange);
+  padding: 1em 1.3em;
+}
+.tm-image-full__caption .eyebrow {
+  font-size: 0.8rem;
+  margin: 0 0 0.4em;
+}
+.tm-image-full__caption h3 {
+  font-size: 1.35rem;
+  margin: 0 0 0.25em;
+}
+.tm-image-full__caption p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+.tm-image-full__credit {
+  position: absolute;
+  right: 4.25%;
+  bottom: 5%;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  /* Keeps the credit legible on light photos too. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* Image beside a text column (PPT half-bleed photo column) ----------------- */
+.slidev-layout.tm-image-side {
+  padding: 0;
+  display: flex;
+}
+.tm-image-side__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6% 4.25%;
+}
+.tm-image-side__text .eyebrow {
+  font-size: 0.8rem;
+  margin: 0 0 0.9em;
+}
+.tm-image-side__text h2 {
+  font-size: 1.7rem;
+  margin: 0 0 0.5em;
+}
+.tm-image-side__caption {
+  font-size: 0.9rem;
+  color: var(--tm-text);
+  opacity: 0.7;
+  margin: 0.8em 0 0;
+}
+.tm-image-side__panel {
+  /* PPT: the photo column is 47.9% of the slide, full height, square. */
+  flex: 0 0 47.9%;
+  position: relative;
+  background-color: var(--tm-fill);
+  background-size: cover;
+  background-position: center;
+}
+.tm-image-side--flip {
+  flex-direction: row-reverse;
+}
+.tm-image-side__credit {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  /* Keeps the credit legible on light photos too. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* `fit: contain` on the image layouts -------------------------------------- */
+/* Photography is happy being cropped to fill; screenshots, diagrams and tall
+   artwork are not. `fit: contain` shows the whole image and lets the slide
+   ground show around it. Declared after both image blocks so it wins on
+   source order against their `background-size: cover`. */
+.slidev-layout.tm-fit-contain,
+.slidev-layout .tm-fit-contain {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* End / thanks (PPT "Eindslide") ------------------------------------------- */
+.slidev-layout.tm-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 3rem;
+}
+.tm-end__main {
+  position: relative;
+  z-index: 1;
+}
+.tm-end__main h1 {
+  /* PPT end slide: 54pt bold ("Bedankt!"). */
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin: 0 0 0.5em;
+}
+.tm-end__contact {
+  position: relative;
+  z-index: 1;
+  font-size: 0.86rem;
+  /* PPT contact block: 120% line spacing. */
+  line-height: 1.2;
+  white-space: pre-line;
+}
