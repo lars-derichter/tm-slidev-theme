@@ -69,9 +69,12 @@ Cleanup applied: dropped `<style>` blocks / `class=` / hardcoded fills,
   browser window instead.
 - Line heights deviate from the PPT on purpose (titles 0.95 vs 85%, body
   1.35 vs 90%) — the PPT values clip on the web. Don't "fix" them back.
-- `presenter` is a reserved Slidev headmatter key: on the first slide it is
-  stripped from layout props. `cover.vue` reads it back from the
-  `frontmatter` prop Slidev also passes.
+- The cover name is `author`, not `presenter`. `presenter` is Slidev's
+  presenter-mode switch (`true | 'dev' | 'build'`): a name there disables
+  presenter mode. `author` is reserved too, but only feeds
+  `<meta name="author">`. On the first slide Slidev strips reserved keys from
+  layout props, so `cover.vue` reads `author` back from the `frontmatter` prop.
+  A string `presenter` still renders (old decks), with a dev-mode warning.
 - In `layouts/toc.vue`, `<Toc>` must be imported explicitly from
   `@slidev/client/builtin/Toc.vue` — a bare `<Toc>` resolves to the layout
   itself (Vue filename self-reference) and recurses.

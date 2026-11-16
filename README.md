@@ -20,7 +20,7 @@ this theme is for TM-affiliated use.
 
 | Layout        | For                                                                                              |
 | ------------- | ------------------------------------------------------------------------------------------------ |
-| `cover`       | Opening slide (`eyebrow`, `presenter`, `affiliation`, `pattern`, `logo`)                         |
+| `cover`       | Opening slide (`eyebrow`, `author`, `affiliation`, `pattern`, `logo`)                            |
 | `toc`         | Table of contents in the Inhoudstafel style (`columns`, `maxDepth`, `mode`, `logo`)              |
 | `section`     | Chapter divider (`number`, `eyebrow`, `pattern`, `logo`)                                         |
 | `default`     | Content slides — heading + list, code, prose                                                     |

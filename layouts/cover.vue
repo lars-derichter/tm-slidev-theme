@@ -5,7 +5,7 @@
     layout: cover
     color: white                  # colorway: white | orange | navy
     eyebrow: Webdesign basics     # small kicker above the title (optional)
-    presenter: Lars De Richter    # name (optional)
+    author: Lars De Richter       # name (optional)
     affiliation: Thomas More      # optional, after a dot
     pattern: grid                 # grid | wave | none (default: grid)
     logo: true                    # set false to hide the wordmark
@@ -19,7 +19,8 @@ const props = withDefaults(
   defineProps<{
     color?: "white" | "orange" | "navy";
     eyebrow?: string;
-    presenter?: string;
+    author?: string;
+    presenter?: string; // deprecated, see below
     affiliation?: string;
     pattern?: "grid" | "wave" | "none";
     logo?: boolean;
@@ -28,12 +29,37 @@ const props = withDefaults(
   { color: "white", pattern: "grid", logo: true },
 );
 
-// The cover usually is the first slide, and there `presenter` is one of
-// Slidev's reserved headmatter config keys — it gets stripped from the layout
-// props. Slidev does pass the full frontmatter as a prop, so read it back.
+// The cover usually is the first slide, whose frontmatter doubles as the
+// deck's headmatter. There, Slidev strips its reserved config keys (such as
+// `author`) from the layout props, so read them back from `frontmatter`.
+//
+// `presenter` is the old name for this field. On the first slide it collides
+// with Slidev's presenter-mode switch (true | 'dev' | 'build'): any other
+// value disables presenter mode. Still rendered for old decks, with a warning.
+const legacyPresenter = computed(() => {
+  const value = props.presenter ?? props.frontmatter?.presenter;
+  return typeof value === "string" && value !== "dev" && value !== "build"
+    ? value
+    : undefined;
+});
+
 const presenterName = computed(
-  () => props.presenter ?? (props.frontmatter?.presenter as string | undefined),
+  () =>
+    props.author ??
+    (props.frontmatter?.author as string | undefined) ??
+    legacyPresenter.value,
 );
+
+if (
+  import.meta.env.DEV &&
+  legacyPresenter.value &&
+  presenterName.value === legacyPresenter.value
+) {
+  console.warn(
+    "[slidev-theme-tm] cover: use `author:` for the name. " +
+      "`presenter:` on the first slide disables presenter mode.",
+  );
+}
 </script>
 
 <template>
