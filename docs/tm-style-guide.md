@@ -110,6 +110,9 @@ The PPT bullet system:
 - Photo frames are square — no border radius, no shadows.
 - Captions sit on a flat white (or colorway) block with a 3px orange left
   spine; credits are small corner labels.
+- Blockquotes in running content use the same motif: a flat panel-fill block
+  (`#F2F5F8`) with a 3px left spine in the bullet colour. On orange and navy
+  grounds the panel drops away and only the spine remains.
 - The two patterns: a square-grid motif and a zigzag wave motif, both flat
   single-tint SVGs. Use one per slide at most, as a band. Never overlay text
   on the busy part of a pattern.

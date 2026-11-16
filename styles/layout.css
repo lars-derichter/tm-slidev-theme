@@ -60,6 +60,7 @@
   --tm-pill-text: var(--tm-white);
   --tm-block-bg: var(--tm-orange);
   --tm-block-text: var(--tm-white);
+  --tm-panel: var(--tm-fill); /* inset panels: blockquotes */
 
   /* Slidev hooks — components that read these pick up the brand orange.   */
   --slidev-theme-primary: var(--tm-orange);
@@ -88,6 +89,7 @@
   --tm-link: var(--tm-navy);
   --tm-pill-bg: var(--tm-navy);
   --tm-block-bg: var(--tm-navy);
+  --tm-panel: transparent;
 }
 
 .slidev-layout.tm-navy {
@@ -104,6 +106,7 @@
   --tm-link: var(--tm-cyan);
   --tm-pill-bg: var(--tm-orange);
   --tm-block-bg: var(--tm-orange);
+  --tm-panel: transparent;
 }
 
 /* Base slide --------------------------------------------------------------- */
@@ -233,6 +236,22 @@
 }
 .slidev-layout ol ul > li::before {
   color: var(--tm-bullet-2);
+}
+
+/* Blockquotes on content slides — the caption motif: a flat panel with a
+   3px spine in the bullet colour, square corners. On the orange and navy
+   colorways the panel drops away and only the spine remains. The quote
+   layout styles its own blockquote (more specific selector, below). */
+.slidev-layout blockquote {
+  background: var(--tm-panel);
+  border-left: 3px solid var(--tm-bullet-1);
+  padding: 0.7em 1.1em;
+  margin: 0 0 0.8em;
+}
+/* The quote layout is excluded: its attribution pill relies on the quote
+   paragraph's bottom margin for spacing. */
+.slidev-layout:not(.tm-quote) blockquote > :last-child {
+  margin-bottom: 0;
 }
 
 /* Images ------------------------------------------------------------------- */

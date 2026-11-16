@@ -64,6 +64,8 @@ level: 2
    2. Werk de inhoud uit.
 3. Kijk het resultaat na.
 
+> Schrijf voor wie de slides leest, niet voor wie ze maakt.
+
 ---
 level: 2
 ---
@@ -145,6 +147,8 @@ Ook gewone contentslides kunnen een colorway krijgen.
 - De bullets wisselen mee van kleur
   - net als links en de footer
 - Gebruik dit spaarzaam: wit is de standaard voor inhoud
+
+> Een citaat verliest hier zijn paneel en houdt enkel de lijn.
 
 ---
 layout: image-side
