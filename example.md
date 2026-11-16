@@ -56,6 +56,18 @@ Begin bij de structuur, niet bij de opmaak.
 level: 2
 ---
 
+# Opsommingen en citaten
+
+1. Lees de opdracht.
+2. Maak een plan.
+   1. Kies de structuur.
+   2. Werk de inhoud uit.
+3. Kijk het resultaat na.
+
+---
+level: 2
+---
+
 Voorbeeld {.eyebrow}
 
 # Eén component, één taak

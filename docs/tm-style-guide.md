@@ -98,6 +98,8 @@ The PPT bullet system:
 - Bullet level 1: orange `•`, bold marker.
 - Bullet level 2: navy `•`, slightly smaller text.
 - Level 3 and deeper: plain `-` dash in the text colour.
+- Numbered lists: numbers in the bullet colour, bold, in the heading face.
+  Level 2 switches to letters (a, b, c) in the level-2 colour.
 - On dark grounds the bullet colours flip with the colorway (white/navy on
   orange; orange/white on navy).
 

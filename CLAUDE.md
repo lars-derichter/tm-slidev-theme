@@ -75,6 +75,11 @@ Cleanup applied: dropped `<style>` blocks / `class=` / hardcoded fills,
   `<meta name="author">`. On the first slide Slidev strips reserved keys from
   layout props, so `cover.vue` reads `author` back from the `frontmatter` prop.
   A string `presenter` still renders (old decks), with a dev-mode warning.
+- Slidev's base content styles (`@slidev/client/styles/layouts-base.css`:
+  list markers, blockquote box, tables) are imported only by Slidev's default
+  theme. This theme starts from the Tailwind reset (`list-style: none`,
+  unstyled blockquotes and tables), so every content element needs its own
+  rule in `styles/layout.css`.
 - In `layouts/toc.vue`, `<Toc>` must be imported explicitly from
   `@slidev/client/builtin/Toc.vue` — a bare `<Toc>` resolves to the layout
   itself (Vue filename self-reference) and recurses.

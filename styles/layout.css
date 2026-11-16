@@ -199,15 +199,40 @@
   color: var(--tm-text);
   font-weight: 400;
 }
+
+/* Numbered lists. Slidev's own list styles live in layouts-base.css, which
+   only its default theme imports; custom themes inherit the Tailwind reset
+   (`list-style: none`), so the numbers must be switched back on here.
+   Markers follow the bullet system: level 1 orange, level 2 navy. */
 .slidev-layout ol {
-  padding-left: 1.3em;
+  list-style: decimal;
+  padding-left: 1.25em;
 }
 .slidev-layout ol > li {
+  padding-left: 0.15em;
   margin: 0 0 0.5em;
 }
 .slidev-layout ol > li::marker {
   color: var(--tm-bullet-1);
+  font-family: var(--tm-heading-font);
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.slidev-layout ol ol {
+  list-style: lower-alpha;
+  margin-top: 0.5em;
+  font-size: 0.95rem;
+}
+/* Second level, whatever mix of list types: navy markers. */
+.slidev-layout :is(ul, ol) ol > li::marker {
+  color: var(--tm-bullet-2);
+}
+.slidev-layout ol ul {
+  margin-top: 0.5em;
+  font-size: 0.95rem;
+}
+.slidev-layout ol ul > li::before {
+  color: var(--tm-bullet-2);
 }
 
 /* Images ------------------------------------------------------------------- */
